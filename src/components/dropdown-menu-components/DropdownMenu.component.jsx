@@ -1,34 +1,26 @@
 import React from 'react';
 
 class DropdownMenu extends React.Component {
-    handleLanguageMouseEnter = (language) => {
-        this.props.onLanguageHover(language);
+    handleItemMouseEnter = (item) => {
+        this.props.onItemHover(item);
     }
 
-    handleLanguageClick = (event, language) => {
-        event.preventDefault();  // This prevents the default action of the anchor tag
-        this.props.onLanguageSelect(language);
+    handleItemClick = (event, item) => {
+        event.preventDefault();
+        this.props.onItemSelect(item);
     }
     
-
     render() {
         return (
             <div className="dropdown-menu">
-                <a href="/en" 
-                   onMouseEnter={() => this.handleLanguageMouseEnter('English')} 
-                   onClick={(event) => this.handleLanguageClick(event, 'English')}>
-                       English
-                </a>
-                <a href="/de" 
-                   onMouseEnter={() => this.handleLanguageMouseEnter('German')} 
-                   onClick={(event) => this.handleLanguageClick(event, 'German')}>
-                       German
-                </a>
-                <a href="/hr" 
-                   onMouseEnter={() => this.handleLanguageMouseEnter('Croatian')} 
-                   onClick={(event) => this.handleLanguageClick(event, 'Croatian')}>
-                       Croatian
-                </a>
+                {this.props.items.map((item, index) => (
+                    <a href={`/${item}`} 
+                       key={index}
+                       onMouseEnter={() => this.handleItemMouseEnter(item)} 
+                       onClick={(event) => this.handleItemClick(event, item)}>
+                           {item}
+                    </a>
+                ))}
             </div>
         );
     }
