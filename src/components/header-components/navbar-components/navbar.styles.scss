@@ -1,0 +1,40 @@
+@import '../../../styles/variables';
+
+.custom-navbar {
+    background-color: $primary-red;
+    margin-bottom: 5%;
+    height: 250px;
+    position: relative;
+
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 70%);
+}
+
+.custom-nav-link {
+    color: #fff !important;
+    font-size: 2rem;
+    font-weight: 500;
+    margin-right: 30%;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    @media (max-width: 992px) { // when the viewport width is 992px or less
+        font-size: 1.5rem; 
+    }
+
+    @media (max-width: 768px) { // when the viewport width is 768px or less
+        font-size: 1.25rem; 
+    }
+
+    @media (max-width: 576px) { // when the viewport width is 576px or less
+        font-size: 1rem; 
+    }
+}
+
+.navbar-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}

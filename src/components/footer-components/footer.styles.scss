@@ -1,0 +1,34 @@
+.footer-container{
+    width: 1000px;
+    width: 100%;
+    margin-top: 3%;
+}
+.disclamer{
+    font-size: 0.85rem;
+}
+.footer-text{
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+.right{
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+.open{
+    margin-top: 5%;
+}
+a {
+    color: #EE0004;
+    text-decoration: none;
+
+    &:hover {
+        color:#CC0000;
+    }
+}
+.mx-2{
+    transition: all 0.3s ease;
+    &:hover {
+        transform: translateY(-10px);
+      }
+}
+

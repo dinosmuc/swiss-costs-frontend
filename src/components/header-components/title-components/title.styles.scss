@@ -1,0 +1,23 @@
+.title {
+  color: white;
+
+  h1 {
+    font-size: 4rem; // default font size for large screens
+
+    @media (max-width: 1200px) { // when the viewport width is 1200px or less
+      font-size: 4rem; 
+    }
+
+    @media (max-width: 992px) { // when the viewport width is 992px or less
+      font-size: 4rem; 
+    }
+
+    @media (max-width: 768px) { // when the viewport width is 768px or less
+      font-size: 3rem; 
+    }
+
+    @media (max-width: 576px) { // when the viewport width is 576px or less
+      font-size: 2rem; 
+    }
+  }
+}

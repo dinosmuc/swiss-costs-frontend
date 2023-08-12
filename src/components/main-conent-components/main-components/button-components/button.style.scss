@@ -1,0 +1,44 @@
+.calculate-button {
+  margin-top: 10%;
+  position: relative;
+  width: 150px;
+  padding: 0.5em 1em;
+  background-color: #EE0004;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+      background-color: #CC0000;
+      transform: scale(1.1);
+  }
+
+ 
+  @media (max-width: 1024px) {
+      width: 130px;  // Adjust width for small laptops
+      padding: 0.75em 1.5em;
+      font-size: 1.1rem; 
+
+  }
+
+  @media (max-width: 768px) {
+      width: 120px;  // Adjust width for tablets
+      padding: 0.75em 1.5em;
+      font-size: 1rem; 
+
+  }
+
+  @media (max-width: 480px), (max-height: 480px) {
+      width: 100px;  // Adjust width for mobile and landscape
+      padding: 0.5em 1em;
+      font-size: 0.875rem;
+  }
+}
+
+
+

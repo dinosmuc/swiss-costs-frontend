@@ -1,0 +1,81 @@
+/* ResultCard.scss */
+
+@import '../../../styles/_variables';
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.result-card {
+  width: 1000px;
+  height: auto;
+  margin: auto;
+  background: linear-gradient(135deg, #f3f4f6 0%, #cccfd1 100%);
+  border-radius: 10px;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 40px 40px 20px 40px;
+  overflow: hidden;
+  animation: 0.5s ease-out 0s 1 slideInFromLeft;
+  position: relative;
+
+  @media (max-width: 1200px) {
+    width: 800px;
+  }
+
+  @media (max-width: 992px) {
+    width: 600px;
+  }
+
+  @media (max-width: 768px) {
+    width: 400px;
+  }
+
+  @media (max-width: 576px) {
+    width: 100%;
+  }
+}
+
+.card-title {
+  font-size: 2em;
+  font-weight: 800;
+  margin-bottom: 1em;
+  color: $primary-red;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.card-p {
+  margin-top: 3em;
+  color: gray;
+  font-weight: 500;
+}
+
+.card-text {
+  line-height: 1.6;
+  color: black;
+  font-weight: 500;
+
+  ul {
+    margin-left: 1em;
+    list-style-type: disc;
+
+    li {
+      margin-bottom: 0.5em;
+    }
+  }
+}
+
+.currency {
+  color: $primary-red;
+  font-weight: 500;
+}
+
+.result-card.show {
+  transform: translateX(0);
+}

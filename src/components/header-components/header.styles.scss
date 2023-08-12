@@ -1,0 +1,30 @@
+.header {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+   
+} 
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px; /* adjust this value to control the distance between the buttons */
+    width: 100%;
+    
+}
+
+.button-left {
+    text-align: left;
+    
+}
+
+.button-right {
+    text-align: right;
+    
+}

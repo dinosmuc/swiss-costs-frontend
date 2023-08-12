@@ -1,0 +1,56 @@
+@import '../../../../styles/_variables';
+
+.form-control-with-arrow {
+  position: relative;
+
+  &.open .form-control-dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  &:not(.open) .form-control-dropdown-arrow {
+    transform: rotate(0deg);
+  }
+
+  &.open {
+    margin-top: 0;
+  }
+}
+
+.form-control-dropdown-arrow {
+  position: absolute;
+  right: 7%;
+  top: 40%;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 11px solid $primary-red;
+  transform-origin: center;
+  transition: transform 0.3s; // Add transition for smooth rotation
+}
+
+
+
+
+
+.custom-tooltip .tooltip-inner {
+    max-width: 400px !important;
+    width: 400px !important;
+    height: auto !important;
+    min-width: 400px !important;
+    font-size: 1em !important;
+    font-weight: 500 !important;
+    // add more custom styling as per your needs
+    background-color: $primary-red !important;
+    text-align: left !important;
+    white-space: pre-wrap !important;
+}
+
+@media screen and (max-width: 768px) {
+    .custom-tooltip .tooltip-inner {
+        max-width: 200px !important;  // reduce the max-width for smaller screens
+        width: 200px !important;
+        min-width: 200px !important;
+        font-size: 0.8em !important;  // reduce the font-size for smaller screens
+    }
+}
