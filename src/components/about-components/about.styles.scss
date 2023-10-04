@@ -1,0 +1,128 @@
+@import "../../styles/_variables";
+
+
+
+
+.cards{
+    margin-top: 3%;
+    margin-bottom: 3%;
+
+    // slide-left animation styles
+    .slide-left-enter, .slide-left-appear {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    .slide-left-enter-active, .slide-left-appear-active {
+        transform: translateX(0);
+        opacity: 1;
+        transition: transform 500ms, opacity 500ms;
+    }
+
+    .slide-left-exit {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .slide-left-exit-active {
+        transform: translateX(-100%);
+        opacity: 0;
+        transition: transform 500ms, opacity 500ms;
+    }
+
+    // slide-right animation styles
+    .slide-right-enter, .slide-right-appear {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    .slide-right-enter-active, .slide-right-appear-active {
+        transform: translateX(0);
+        opacity: 1;
+        transition: transform 500ms, opacity 500ms;
+    }
+
+    .slide-right-exit {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .slide-right-exit-active {
+        transform: translateX(100%);
+        opacity: 0;
+        transition: transform 500ms, opacity 500ms;
+    }
+
+
+
+    .about.card{
+        background: linear-gradient(135deg, #f3f4f6 0%, #cccfd1 100%);
+        border-radius: 10px;
+        padding: 40px 40px 20px 40px;
+        overflow: hidden;
+        box-shadow: 0px 14px 80px rgba(238, 0, 4, 0.2);
+        box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+
+        &:hover {
+            box-shadow: 0px 6px 20px rgba(238, 0, 4, 0.3);
+        }
+        
+    
+        @media (max-width: 1200px) {
+            width: 800px;
+        }
+    
+        @media (max-width: 992px) {
+            width: 600px;
+        }
+    
+        @media (max-width: 768px) {
+            width: 400px;
+        }
+    
+        @media (max-width: 576px) {
+            width: 100%;
+        }
+    }
+    h5 {
+        font-size: 2em;
+        border-bottom: 2px solid rgba(238, 0, 4, 0.2); // A subtle underline for the title
+        font-weight: 800;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        color: $primary-red;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+            
+          
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+
+        li {
+            margin-bottom: 10px; // Space between list items
+            font-size: 1rem; // Slightly larger font for clarity
+
+            strong {
+                color: $primary-red; // Making the labels (like "Locals:") stand out in the same red
+            }
+        }
+    }
+
+    p {
+        margin-top: 3%; // Space before the last paragraph
+        margin-bottom: 5%;
+    }
+
+    .form-control:focus {
+        box-shadow: 0px 14px 80px rgba(238, 0, 4, 0.2);
+        border-color: $primary-red;
+        
+        
+      }
+      
+}

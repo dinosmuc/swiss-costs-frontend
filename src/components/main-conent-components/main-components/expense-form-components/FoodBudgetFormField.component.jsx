@@ -2,22 +2,33 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+import { API_BASE_URL } from '../../../../config';
+
 class FoodBudgetFormField extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+      super(props);
 
-        this.state = {
-            isOpen: false,
-        };
+      this.state = {
+          isOpen: false,
+          foodBudgetData: [],
+      };
 
-        this.budgetOptions = ['low', 'medium', 'high'];
+      this.budgetOptions = ['very_low', 'low', 'moderate_low', 'medium', 'moderate_high', 'high', 'very_high', 'extreme'];
 
-        this.budgetTooltips = {
-            'low': 'A low food budget is ideal for individuals who often cook at home, rarely eat out, and shop for groceries prudently.',
-            'medium': 'A medium food budget is suitable for those who occasionally eat out, order takeouts, or buy premium grocery items.',
-            'high': 'A high food budget caters to individuals who frequently eat at restaurants, order expensive takeouts, or buy high-end grocery items.',
-        };
-    }
+      this.budgetTooltips = {
+        'very_low': `You're mostly shopping at discount stores like Denner or buying the "M-Budget" line from Migros. Fresh produce is limited to what's on sale. Forget about dining out; even a basic meal in a Swiss restaurant will blow this budget.`,
+        'low': `You're still focused on budget stores but can afford some occasional quality items from Coop or Migros. You might even splurge on a bar of Frey or Toblerone chocolate. Takeaway from a kebab shop or a slice of pizza is the max you can afford for dining out.`,
+        'moderate_low': `You can have a more diversified diet, maybe even add some affordable Swiss cheese or local sausages. Dining out is restricted to cheaper options like Coop Pronto takeaway or the occasional McDonald's, and that's once or twice a month.`,
+        'medium': `You're comfortable with your groceries, mixing in some organic or local products. Dining out can be a weekly thing but stick to casual places like local pizzerias or a simple fondue place. Forget about Michelin stars, though.`,
+        'moderate_high': `Your grocery cart regularly includes local specialties like Gruyère cheese or Bundnerfleisch. You're dining out 2-3 times a week, which can include mid-range places serving Swiss cuisine like raclette or rösti.`,
+        'high': `Your pantry is well-stocked with quality products, including some organic items. Dining out is a regular 4 times a week, including some of the finer restaurants in town. You could even do an occasional weekend brunch at a nice lakeside café.`,
+        'very_high': `You're eating out so often you almost don't need a kitchen. You're not only going to well-known places but also indulging in occasional fine dining experiences, including tasting menus.`,
+        'extreme': `You've got a personal shopper to get your groceries from high-end stores like Globus. For dining, you're a regular at top Michelin-starred places and wouldn't hesitate to fly to a neighboring country just for a meal if you could.`
+    };
+        
+    
+    
+  }
 
     handleChange = (event) => {
         this.props.onChange(event);
@@ -46,6 +57,23 @@ class FoodBudgetFormField extends React.Component {
         )
     }
 
+    componentDidMount() {
+      fetch(`${API_BASE_URL}/costs/api/food_budget/`)
+      .then(response => response.json())
+      .then(data => {
+          this.setState({ foodBudgetData: data });
+      })
+      .catch(error => console.log("Error fetching data: ", error));
+    }
+
+    findFoodBudgetValue = () => {
+      const { foodBudget } = this.props;
+      const { foodBudgetData } = this.state;
+  
+      const found = foodBudgetData.find(item => item.budget === foodBudget);
+      return found ? found.value : '-';  // Return '-' if not found
+  }
+
     render() {
         return (
             <Form.Group as={Row} controlId="foodBudgetForm" className="form-group-wrapper">
@@ -73,7 +101,9 @@ class FoodBudgetFormField extends React.Component {
                       <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
                     </div>
                   </OverlayTrigger>
-                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>- 250 CHF</Form.Text>
+                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>
+                      {`- ${this.findFoodBudgetValue()} CHF`}
+                  </Form.Text>
                 </Col>
             </Form.Group>
         );

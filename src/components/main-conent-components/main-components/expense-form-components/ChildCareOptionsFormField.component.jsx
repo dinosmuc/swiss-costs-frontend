@@ -2,12 +2,16 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+import { API_BASE_URL } from '../../../../config';  // Adjust the path to point to your config.js
+
+
 class ChildCareOptionsFormField extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isOpen: false,
+            childCareData: []
         };
 
         this.childCareOptions = [
@@ -54,6 +58,24 @@ class ChildCareOptionsFormField extends React.Component {
         )
     }
 
+    componentDidMount() {
+        fetch(`${API_BASE_URL}/costs/api/childcare/`)
+        .then(response => response.json())
+        .then(data => {
+            this.setState({ childCareData: data });
+        })
+        .catch(error => console.log("Error fetching data: ", error));
+    }
+
+    findChildCareCost = () => {
+        const { childcare } = this.props;
+        const { childCareData } = this.state;
+
+        const found = childCareData.find(item => item.childcare_type === childcare);
+        return found ? found.value : '-';  // Return '-' if not found
+    }
+    
+
     render() {
         return (
             <Form.Group as={Row} controlId="childCareForm" className="form-group-wrapper">
@@ -81,7 +103,9 @@ class ChildCareOptionsFormField extends React.Component {
                       <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
                     </div>
                   </OverlayTrigger>
-                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>- 250 CHF</Form.Text>
+                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>
+                    {`- ${this.findChildCareCost()} CHF`}
+                  </Form.Text>
                 </Col>
             </Form.Group>
         );

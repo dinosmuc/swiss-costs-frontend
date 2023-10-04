@@ -2,6 +2,9 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+
+import { API_BASE_URL } from '../../../../config';
+
 class HealthInsuranceFormField extends React.Component {
   constructor(props) {
     super(props);
@@ -22,11 +25,32 @@ class HealthInsuranceFormField extends React.Component {
   };
   
 
-    this.state = {
-      isOpen: false,
-      selectedTooltip: this.healthInsuranceTooltips[this.props.healthInsurance]
-    };
+  this.state = {
+    isOpen: false,
+    estimatedCost: null,
   }
+
+}
+
+componentDidMount() {
+ 
+  this.fetchHealthInsuranceEstimate(this.props.healthInsurance, this.props.age);
+}
+
+componentDidUpdate(prevProps) {
+  
+  if (prevProps.healthInsurance !== this.props.healthInsurance || prevProps.age !== this.props.age) {
+    this.fetchHealthInsuranceEstimate(this.props.healthInsurance, this.props.age);
+  }
+}
+
+fetchHealthInsuranceEstimate = async (coverage, age) => {
+
+  const response = await fetch(`${API_BASE_URL}/costs/api/calculate_insurance_cost/?age=${age}&coverage=${coverage}`);
+  const data = await response.json();
+  this.setState({ estimatedCost: data.cost }); // Adjust the 'cost' to whatever field your API actually uses
+};
+
 
   handleChange = (event) => {
     this.props.onChange(event);
@@ -82,7 +106,9 @@ class HealthInsuranceFormField extends React.Component {
               <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
             </div>
           </OverlayTrigger>
-          <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute' }}>- 250 CHF</Form.Text>
+          <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute' }}>
+            {this.state.estimatedCost !== null ? `- ${this.state.estimatedCost} CHF` : '- Loading...'}
+          </Form.Text>
         </Col>
       </Form.Group>
     );

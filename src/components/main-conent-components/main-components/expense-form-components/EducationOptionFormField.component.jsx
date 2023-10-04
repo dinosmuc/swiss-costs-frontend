@@ -2,31 +2,45 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+import { API_BASE_URL } from '../../../../config';
+
 class EducationOptionFormField extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isOpen: false,
+            educationData: [],
         };
 
-        this.educationOptions = [
-            { value: "none", label: "None" },
-            { value: "public_school", label: "Public School" },
-            { value: "private_school", label: "Private School" },
-            { value: "international_school", label: "International School" },
-            { value: "university", label: "University" },
-        ];
+    
+      this.educationOptions = [
+          { value: "none", label: "None" },
+          { value: "public_school", label: "Public School" },
+          { value: "private_school", label: "Private School" },
+          { value: "international_school", label: "International School" },
+          { value: "university", label: "University" },
+      ];
 
-        this.educationTooltips = {
-            'none': 'No education options chosen.',
-            'public_school': 'Public schools are funded by local, state, and federal government funds. In contrast to private schools, they must accept all children.',
-            'private_school': 'Private schools are not funded by the government but by private contributions. They are generally free to set their own standards for teachers and students.',
-            'international_school': 'International schools follow an international curriculum, such as the International Baccalaureate, and are usually taught in English.',
-            'university': 'Universities provide undergraduate and postgraduate education and academic research.',
-        };
+      this.educationTooltips = {
+        'none': 'No education options chosen.',
+        'public_school': 'Public schools are funded by government and must accept all children.',
+        'private_school': 'Private schools set their own standards and are funded privately.',
+        'international_school': 'International schools follow an international curriculum and are usually in English.',
+        'university': 'Universities offer undergraduate and postgraduate education.',
+    };
+
     }
 
+    componentDidMount() {
+        fetch(`${API_BASE_URL}/costs/api/education/?format=json`)
+        .then(response => response.json())
+        .then(data => {
+            this.setState({ educationData: data });
+        })
+        .catch(error => console.log("Error fetching data: ", error));
+      }
+      
     handleChange = (event) => {
         this.props.onChange(event);
         this.setState({ isOpen: false }); // Close when an option is chosen
@@ -53,6 +67,15 @@ class EducationOptionFormField extends React.Component {
           </Tooltip>
         )
     }
+
+    findEducationCost = () => {
+        const { education } = this.props;
+        const { educationData } = this.state;
+      
+        const found = educationData.find(item => item.education_type === education);
+        return found ? found.value : '-';  // Return '-' if not found
+      }
+      
 
     render() {
         return (
@@ -81,7 +104,10 @@ class EducationOptionFormField extends React.Component {
                       <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
                     </div>
                   </OverlayTrigger>
-                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>- 250 CHF</Form.Text>
+                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>
+                        {`- ${this.findEducationCost()} CHF`}
+                  </Form.Text>
+
                 </Col>
             </Form.Group>
         );

@@ -2,27 +2,48 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+import { API_BASE_URL } from '../../../../config';
+
 class InternetPlanFormField extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isOpen: false,
+            internetPlanData: []
         };
 
-        this.internetPlanOptions = ['basic', 'standard', 'high-speed', 'ultra high-speed'];
+        this.internetPlanOptions = ['none', 'basic', 'standard', 'high_speed'];
 
         this.internetPlanTooltips = {
-          'basic': 'The Basic plan offers moderate internet speed, suitable for light web browsing, checking emails, and using social media. Ideal for individuals or small households in Switzerland with minimal streaming needs.',
-          'standard': 'The Standard plan provides faster internet speed, catering to regular online activities such as streaming videos in HD, online gaming, and downloading large files. Suitable for family use and moderate online multitasking.',
-          'high-speed': 'The High-Speed plan ensures very high-speed internet connectivity. Designed for tech-savvy households, it supports multiple devices streaming HD or 4K video, real-time gaming, and seamless video conferencing. It’s a great fit for a connected lifestyle.',
-          'ultra high-speed': 'The Ultra High-Speed plan delivers the highest available internet speed, meeting the demands of heavy usage. Capable of handling multiple devices streaming HD or 4K video, conducting high-quality video conferences, and engaging in real-time gaming simultaneously. Perfect for professionals and enthusiasts who need top-tier connectivity.',
-        };
+          'none': 'No internet plan. Rely on public Wi-Fi or mobile data.',
+          'basic': 'Basic Connectivity: Up to 100 Mbps. Good for light browsing, emails, and standard-definition streaming.',
+          'standard': 'Standard Plan: Up to 500 Mbps. Suitable for HD streaming, online gaming, and smooth video conferencing.',
+          'high_speed': 'High-Speed Plan: Up to 2 Gbps. Ideal for 4K streaming, multiple video conferences, and high-end online gaming.'
+      };
+      
+    }
+
+    componentDidMount() {
+        fetch(`${API_BASE_URL}/costs/api/internet_plan/`)
+        .then(response => response.json())
+        .then(data => {
+            this.setState({ internetPlanData: data });
+        })
+        .catch(error => console.log("Error fetching data: ", error));
+    }
+
+    findInternetPlanCost = () => {
+        const { internetPlan } = this.props;
+        const { internetPlanData } = this.state;
+
+        const found = internetPlanData.find(item => item.plan === internetPlan);
+        return found ? found.value : '-';
     }
 
     handleChange = (event) => {
         this.props.onChange(event);
-        this.setState({ isOpen: false }); // Close when an option is chosen
+        this.setState({ isOpen: false });
     }
 
     handleMouseDown = () => {
@@ -41,10 +62,10 @@ class InternetPlanFormField extends React.Component {
         const optionValue = this.props.internetPlan;
         const tooltipText = this.internetPlanTooltips[optionValue];
         return (
-          <Tooltip id="internetPlan-tooltip" className="custom-tooltip" {...props}>
-            {tooltipText}
-          </Tooltip>
-        )
+            <Tooltip id="internetPlan-tooltip" className="custom-tooltip" {...props}>
+                {tooltipText}
+            </Tooltip>
+        );
     }
 
     render() {
@@ -52,31 +73,33 @@ class InternetPlanFormField extends React.Component {
             <Form.Group as={Row} controlId="internetPlanForm" className="form-group-wrapper">
                 <Form.Label column sm="5" className="form-label-right">Internet Plan</Form.Label>
                 <Col sm="6" className={`form-control-with-arrow ${this.state.isOpen ? 'open' : ''}`}>
-                  <OverlayTrigger
-                    placement={window.innerWidth > 768 ? 'right' : 'top'}
-                    delay={{ show: 250, hide: 400 }}
-                    overlay={this.renderTooltip}
-                  >
-                    <div onMouseDown={this.handleMouseDown}>
-                      <Form.Control 
-                        as="select" 
-                        name="internetPlan" 
-                        value={this.props.internetPlan} 
-                        onChange={this.handleChange}
-                        onFocus={this.handleFocus}
-                        onBlur={this.handleBlur}
-                        className="red-text"
-                      >
-                          {this.internetPlanOptions.map(option => (
-                              <option key={option} value={option}>
-                                {option.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                              </option>
-                          ))}
-                      </Form.Control>
-                      <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
-                    </div>
-                  </OverlayTrigger>
-                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>- 250 CHF</Form.Text>
+                    <OverlayTrigger
+                        placement={window.innerWidth > 768 ? 'right' : 'top'}
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={this.renderTooltip}
+                    >
+                        <div onMouseDown={this.handleMouseDown}>
+                            <Form.Control 
+                                as="select" 
+                                name="internetPlan" 
+                                value={this.props.internetPlan} 
+                                onChange={this.handleChange}
+                                onFocus={this.handleFocus}
+                                onBlur={this.handleBlur}
+                                className="red-text"
+                            >
+                                {this.internetPlanOptions.map(option => (
+                                    <option key={option} value={option}>
+                                        {option.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                            <span className="form-control-dropdown-arrow"></span>
+                        </div>
+                    </OverlayTrigger>
+                    <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>
+                        {`- ${this.findInternetPlanCost()} CHF`}
+                    </Form.Text>
                 </Col>
             </Form.Group>
         );

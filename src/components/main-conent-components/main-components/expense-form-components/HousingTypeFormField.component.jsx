@@ -2,6 +2,9 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+import { API_BASE_URL } from '../../../../config';
+
+
 class HousingTypeFormField extends React.Component {
   constructor(props) {
     super(props);
@@ -16,8 +19,38 @@ class HousingTypeFormField extends React.Component {
 
     this.state = {
       isOpen: false,
+      estimatedCost: null,
+
     };
   }
+
+  componentDidMount() {
+    this.fetchHousingCostEstimate(this.props.canton, this.props.housingType);
+
+  }
+
+  componentDidUpdate(prevProps) {
+  
+    if (prevProps.housingType !== this.props.housingType || prevProps.canton !== this.props.canton) {
+      this.fetchHousingCostEstimate(this.props.canton, this.props.housingType);
+    }
+  }
+
+  fetchHousingCostEstimate = async (canton, housingType ) => {
+    
+    const response = await fetch(`${API_BASE_URL}/costs/api/calculate_housing_cost/?housing_Type=${housingType}&canton=${canton}`);
+
+    const data = await response.json();
+
+    console.log(data)
+    
+    this.setState({ estimatedCost: data.cost }); // Adjust the 'cost' to whatever field your API actually uses
+  };
+
+
+
+
+
 
   handleChange = (event) => {
     this.props.onChange(event);  
@@ -59,7 +92,9 @@ class HousingTypeFormField extends React.Component {
               <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
             </div>
           </OverlayTrigger>
-          <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>- 250 CHF</Form.Text>
+          <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute' }}>
+            {this.state.estimatedCost !== null ? `- ${this.state.estimatedCost} CHF` : '- Loading...'}
+          </Form.Text>
         </Col>
       </Form.Group>
     );

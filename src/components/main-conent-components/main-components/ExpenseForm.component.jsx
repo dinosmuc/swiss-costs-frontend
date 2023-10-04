@@ -261,8 +261,8 @@ class ExpenseForm extends React.Component {
                 onJobChange={this.handleJobChange}
                 className="form-group-wrapper d-flex flex-column flex-md-row"
               />
-              <HousingTypeFormField name="housingType" onChange={this.handleChange} housingType={this.state.housingType} className="form-group-wrapper d-flex flex-column flex-md-row" />
-              <HealthInsuranceFormField name="healthInsurance" onChange={this.handleChange} healthInsurance={this.state.healthInsurance} className="form-group-wrapper d-flex flex-column flex-md-row"    />
+              <HousingTypeFormField name="housingType" onChange={this.handleChange}  canton={this.state.canton} housingType={this.state.housingType} className="form-group-wrapper d-flex flex-column flex-md-row" />
+              <HealthInsuranceFormField name="healthInsurance" onChange={this.handleChange} healthInsurance={this.state.healthInsurance} age={this.state.age} className="form-group-wrapper d-flex flex-column flex-md-row"    />
               
               <VehicleTypeFormField 
                 vehicleType={this.state.vehicleType}
@@ -280,7 +280,7 @@ class ExpenseForm extends React.Component {
               <ClothingBudgetFormField name="clothingBudget" onChange={this.handleChange} clothingBudget={this.state.clothingBudget} className="form-group-wrapper d-flex flex-column flex-md-row" />
               <ChildCareOptionsFormField name="childcare" onChange={this.handleChange} childcare={this.state.childcare} className="form-group-wrapper d-flex flex-column flex-md-row" />
               <EducationOptionFormField name="education" onChange={this.handleChange} education={this.state.education} className="form-group-wrapper d-flex flex-column flex-md-row" />
-              <EntertainmentAndLeisureBudgetFormField name="entertainmentAndLeisure" onChange={this.handleChange} entertainmentAndLeisure={this.state.entertainmentAndLeisure} className="form-group-wrapper d-flex flex-column flex-md-row" />
+              <EntertainmentAndLeisureBudgetFormField name="entertainmentAndLeisure" onChange={this.handleChange} entertainmentAndLeisure={this.state.entertainmentAndLeisure} className="form-group-wrapper d-flex flex-column flex-md-row"/>
               <div className="text-center">
                 <Button className="calculate-button">Calculate</Button>
               </div>

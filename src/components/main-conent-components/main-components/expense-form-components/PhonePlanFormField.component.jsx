@@ -2,23 +2,46 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+import { API_BASE_URL } from '../../../../config';
+
 class PhonePlanFormField extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isOpen: false,
+            phonePlanData: []
         };
 
-        this.phonePlanOptions = ['basic', 'standard', 'premium', 'unlimited'];
+        this.phonePlanOptions = ['none','basic', 'standard', 'premium'];
 
         this.phonePlanTooltips = {
+            'none': 'No phone plan selected.',
             'basic': 'The Basic plan is tailored for minimal usage, offering essential features like voice calling and SMS, along with limited data. Suitable for those who mainly use their phone for calls and texts within Switzerland.',
             'standard': 'The Standard plan is designed for average users, providing a balanced mix of voice calling, SMS, and data. It includes roaming options and caters to those who need regular internet access for apps and browsing.',
             'premium': 'The Premium plan is aimed at heavy users, with generous allowances for voice calling, SMS, and high-speed data. Including international roaming and additional services, it\'s ideal for business users and frequent travelers.',
-            'unlimited': 'The Unlimited plan offers unrestricted access to voice calling, SMS, and data within Switzerland. Perfect for power users, streamers, and those who need constant connectivity without worrying about limits or overage charges.',
+            
         };
     }
+
+    componentDidMount() {
+       
+        fetch(`${API_BASE_URL}/costs/api/phone_plan/`)
+        .then(response => response.json())
+        .then(data => {
+            this.setState({ phonePlanData: data });
+        })
+        .catch(error => console.log("Error fetching data: ", error));
+    }
+
+    findPhonePlanCost = () => {
+        const { phonePlan } = this.props;
+        const { phonePlanData } = this.state;
+
+        const found = phonePlanData.find(item => item.plan === phonePlan);
+        return found ? found.value : '-';
+    }
+
 
     handleChange = (event) => {
         this.props.onChange(event);
@@ -74,7 +97,9 @@ class PhonePlanFormField extends React.Component {
                       <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
                     </div>
                   </OverlayTrigger>
-                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>- 250 CHF</Form.Text>
+                  <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>
+                        {`- ${this.findPhonePlanCost()} CHF`}
+                  </Form.Text>
                 </Col>
             </Form.Group>
         );

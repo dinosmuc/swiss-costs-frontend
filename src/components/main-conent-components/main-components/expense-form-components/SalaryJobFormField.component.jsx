@@ -2,6 +2,9 @@ import React from 'react';
 import { Form, Row, Col, Button, ButtonGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import '../expenseForm.styles.scss';
 
+import { API_BASE_URL } from '../../../../config';
+
+
 class SalaryJobFormField extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +12,7 @@ class SalaryJobFormField extends React.Component {
       isOpen: false,
       enterSalary: this.props.enterSalary || false,
       salary: this.props.salary || "",
+      neto_salary: null,
       jobTitle: this.props.jobTitle || "",
       jobTitles: [
         "Software Engineer",
@@ -22,6 +26,7 @@ class SalaryJobFormField extends React.Component {
         "Graphic Designer",
         "Human Resources Manager"
       ]
+      
     };
   }
 
@@ -36,8 +41,9 @@ class SalaryJobFormField extends React.Component {
       this.setState({ salary: event.target.value, isOpen: false });
       this.props.onSalaryChange(event.target.value);
     } else {
-      this.setState({ jobTitle: event.target.value, isOpen: false });
-      this.props.onJobChange(event.target.value);
+      this.setState({ jobTitle: event.target.value }, () => {
+        this.fetchSalaryByJobTitle(this.state.jobTitle);
+      });
     }
   }
 
@@ -50,6 +56,37 @@ class SalaryJobFormField extends React.Component {
       The salaries associated with these job titles are average values sourced from our research on sites like job.ch. They may not always reflect the most current or accurate salaries. Always conduct your own research when considering salary figures.
     </Tooltip>
   )
+  
+  componentDidMount() {
+    this.fetchSalary(this.props.salary);
+  }
+
+  componentDidUpdate(prevProps,prevState) {
+    if (prevProps.salary !== this.props.salary) {
+      this.fetchSalary(this.props.salary);
+    }
+    if (prevState.jobTitle !== this.state.jobTitle) {
+      this.fetchSalaryByJobTitle(this.state.jobTitle);
+    }
+  }
+
+  fetchSalaryByJobTitle = async (jobTitle) => {
+    const response = await fetch(`${API_BASE_URL}/costs/api/get_salary_by_job_title/?job_title=${jobTitle}`);
+    const data = await response.json();
+    console.log("Salary by Job Title:", data);
+    this.setState({ neto_salary: data.neto_salary });
+  };
+
+  fetchSalary = async (salary) => {
+    
+    const response = await fetch(`${API_BASE_URL}/costs/api/calculate_neto_salary/?bruto_salary=${salary}`);
+
+    const data = await response.json();
+    console.log(data)
+    this.setState({ neto_salary: data.neto_salary }); // Adjust the 'cost' to whatever field your API actually uses
+  };
+
+
 
   render() {
     return (
@@ -73,7 +110,9 @@ class SalaryJobFormField extends React.Component {
             <Form.Label column sm={5} className="form-label-right">Salary Gross:</Form.Label>
             <Col sm={6} className={`form-control-with-arrow ${this.state.isOpen ? 'open' : ''}`}>
               <Form.Control type="number" name="salary" value={this.state.salary} onChange={this.handleChange} className="red-text" />
-              <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>Netto = 5200 CHF</Form.Text>
+              <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute' }}>
+                  {this.state.neto_salary !== null ? `Net Salary  -${this.state.neto_salary} CHF` : '- Loading...'}
+              </Form.Text>
             </Col>
           </Form.Group>
         ) : (
@@ -96,7 +135,9 @@ class SalaryJobFormField extends React.Component {
                   <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
                 </div>
               </OverlayTrigger>
-              <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}>Brutto = 6000 CHF  /   Netto = 5200 CHF</Form.Text>
+              <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute' }}>
+                  {this.state.neto_salary !== null ? `Net Salary  -${this.state.neto_salary} CHF` : '- Loading...'}
+              </Form.Text>
             </Col>
           </Form.Group>
         )}
