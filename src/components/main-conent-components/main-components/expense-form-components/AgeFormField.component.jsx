@@ -2,6 +2,24 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+
+
+const translations = {
+  English: {
+    label: "Age",
+    tooltip: "Your age can significantly influence various aspects of your cost of living. This includes health insurance premiums, tax benefits or liabilities. Please select your current age to help us estimate these costs more accurately."
+  },
+  German: {
+    label: "Alter",
+    tooltip: "Ihr Alter kann verschiedene Aspekte Ihrer Lebenshaltungskosten erheblich beeinflussen. Dazu gehören Krankenversicherungsprämien, steuerliche Vorteile oder Verbindlichkeiten. Bitte wählen Sie Ihr aktuelles Alter, um diese Kosten genauer schätzen zu können."
+  },
+  Croatian: {
+    label: "Dob",
+    tooltip: "Vaša dob može značajno utjecati na različite aspekte vaših životnih troškova. To uključuje premije zdravstvenog osiguranja, porezne pogodnosti ili obveze. Molimo odaberite svoju trenutačnu dob kako bismo točnije procijenili ove troškove."
+  }
+};
+
+
 class AgeFormField extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +31,7 @@ class AgeFormField extends React.Component {
   handleChange = (event) => {
     this.props.onChange(event);
     this.setState({ isOpen: false }); // Close when an option is chosen
-}
+  }
 
 
 
@@ -29,18 +47,21 @@ class AgeFormField extends React.Component {
     this.setState({ isOpen: false });
   }
 
-  renderTooltip = (props) => (
-    <Tooltip id="age-tooltip" className="custom-tooltip" {...props}>
-      Your age can significantly influence various aspects of your cost of living. This includes health insurance premiums,
-      tax benefits or liabilities.
-      Please select your current age to help us estimate these costs more accurately.
-    </Tooltip>
-  )
+  renderTooltip = (props) => {
+    const language = this.props.language || "English"; // Default to English
+    return (
+      <Tooltip id="age-tooltip" className="custom-tooltip" {...props}>
+        {translations[language].tooltip}
+      </Tooltip>
+    );
+  }
+
 
   render() {
+    const language = this.props.language || "English"; // Default to English
     return (
       <Form.Group as={Row} controlId="ageForm" className="form-group-wrapper">
-        <Form.Label column sm={5} className="form-label-right">Age</Form.Label>
+        <Form.Label column sm={5} className="form-label-right">{translations[language].label}</Form.Label>
         <Col sm={6} className={`form-control-with-arrow ${this.state.isOpen ? 'open' : ''}`}>
           <OverlayTrigger
             placement={window.innerWidth > 768 ? 'right' : 'top'}

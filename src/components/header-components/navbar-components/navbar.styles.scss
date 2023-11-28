@@ -9,27 +9,57 @@
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 70%);
 }
 
+
+.language-option {
+    cursor: pointer; // Indicates clickable items
+    color: #fff !important;
+    font-size: 2rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+
+
+
+    // Highlight the active language
+    &.active {
+        font-weight: bold;
+        color: #ffd700; // Gold color for active language
+    }
+}
+
+// Style for the separator
+.language-separator {
+    color: #fff; // White color for the separator
+    font-size: 2rem;
+    margin: 0 10px; // Add some spacing around the separator
+}
+
+
+
 .custom-nav-link {
     color: #fff !important;
     font-size: 2rem;
     font-weight: 500;
-    margin-right: 30%;
+    margin-right: 20%;
     transition: all 0.3s ease;
+    white-space: nowrap;
 
     &:hover {
         transform: scale(1.1);
     }
 
-    @media (max-width: 992px) { // when the viewport width is 992px or less
-        font-size: 1.5rem; 
+    @media (max-width: 992px) {
+        // when the viewport width is 992px or less
+        font-size: 1.5rem;
     }
 
-    @media (max-width: 768px) { // when the viewport width is 768px or less
-        font-size: 1.25rem; 
+    @media (max-width: 768px) {
+        // when the viewport width is 768px or less
+        font-size: 1.25rem;
     }
 
-    @media (max-width: 576px) { // when the viewport width is 576px or less
-        font-size: 1rem; 
+    @media (max-width: 576px) {
+        // when the viewport width is 576px or less
+        font-size: 1rem;
     }
 }
 

@@ -2,6 +2,23 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+
+const translations = {
+  English: {
+    label: "Canton",
+    tooltip: "Each canton has unique costs and tax structures. Your choice will affect your estimated expenses like housing, insurance, and more. Taxes can vary greatly among cantons."
+  },
+  German: {
+    label: "Kanton",
+    tooltip: "Jeder Kanton hat einzigartige Kosten- und Steuerstrukturen. Ihre Wahl beeinflusst Ihre geschätzten Ausgaben wie Wohnen, Versicherungen und mehr. Die Steuern können je nach Kanton stark variieren."
+  },
+  Croatian: {
+    label: "Kanton",
+    tooltip: "Svaki kanton ima jedinstvene troškove i porezne strukture. Vaš izbor će utjecati na vaše procijenjene troškove poput stanovanja, osiguranja i slično. Porezi se mogu znatno razlikovati među kantonima."
+  }
+};
+
+
 class CantonFormField extends React.Component {
   constructor(props) {
     super(props);
@@ -15,6 +32,7 @@ class CantonFormField extends React.Component {
       'Lucerne', 'Neuchâtel', 'Nidwalden', 'Obwalden', 'Schaffhausen', 'Schwyz',
       'Solothurn', 'St. Gallen', 'Thurgau', 'Ticino', 'Uri', 'Valais', 'Vaud', 'Zug', 'Zürich'
     ];
+
   }
 
   handleChange = (event) => {
@@ -34,19 +52,24 @@ class CantonFormField extends React.Component {
     this.setState({ isOpen: false });
   }
 
-  renderTooltip = (props) => (
-    <Tooltip id="canton-tooltip" className="custom-tooltip" {...props}>
-      Each canton has unique costs and tax structures. Your choice will affect your estimated expenses like housing, insurance, and more. Taxes can vary greatly among cantons.
-    </Tooltip>
-  )
+  renderTooltip = (props) => {
+    const language = this.props.language || "English"; // Default to English
+    return (
+      <Tooltip id="canton-tooltip" className="custom-tooltip" {...props}>
+        {translations[language].tooltip}
+      </Tooltip>
+    );
+  }
 
 
-  
+
+
 
   render() {
+    const language = this.props.language || "English"; // Default to English
     return (
       <Form.Group as={Row} controlId="cantonForm" className="form-group-wrapper">
-        <Form.Label column sm={5} className="form-label-right">Canton</Form.Label>
+        <Form.Label column sm={5} className="form-label-right">{translations[language].label}</Form.Label>
         <Col sm={6} className={`form-control-with-arrow ${this.state.isOpen ? 'open' : ''}`}>
           <OverlayTrigger
             placement={window.innerWidth > 768 ? 'right' : 'top'}

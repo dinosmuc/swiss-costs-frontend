@@ -29,7 +29,7 @@ class Result extends React.Component {
 
     return (
       <div className={classes} ref={node => this.node = node}>
-        <h2>Save: 500 CHF</h2>
+        <h2>Save: {Math.floor(this.props.savings)} CHF</h2>
       </div>
     );
   }

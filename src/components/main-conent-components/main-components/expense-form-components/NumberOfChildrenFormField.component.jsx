@@ -2,6 +2,21 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+const translations = {
+  English: {
+    label: "Number of Children",
+    tooltip: "The number of children you have can significantly impact various aspects of your cost of living. This includes certain tax benefits. Please select the number of children to help us estimate these costs more accurately."
+  },
+  German: {
+    label: "Anzahl der Kinder",
+    tooltip: "Die Anzahl Ihrer Kinder kann verschiedene Aspekte Ihrer Lebenshaltungskosten erheblich beeinflussen. Dies beinhaltet bestimmte steuerliche Vorteile. Bitte geben Sie die Anzahl der Kinder an, um diese Kosten genauer zu schätzen."
+  },
+  Croatian: {
+    label: "Broj djece",
+    tooltip: "Broj djece koju imate može značajno utjecati na različite aspekte vaših troškova života. To uključuje određene porezne pogodnosti. Molimo odaberite broj djece kako bismo preciznije procijenili vaše troškove."
+  }
+};
+
 class NumberOfChildrenFormField extends React.Component {
   constructor(props) {
     super(props);
@@ -27,16 +42,20 @@ class NumberOfChildrenFormField extends React.Component {
     this.setState({ isOpen: false });
   }
 
-  renderTooltip = (props) => (
-    <Tooltip id="children-tooltip" className="custom-tooltip" {...props}>
-      The number of children you have can significantly impact various aspects of your cost of living. This includes certain tax benefits. Please select the number of children to help us estimate these costs more accurately.
-    </Tooltip>
-  )
+  renderTooltip = (props) => {
+    const language = this.props.language || "English"; // default to English if no language prop is passed
+    return (
+      <Tooltip id="children-tooltip" className="custom-tooltip" {...props}>
+        {translations[language].tooltip}
+      </Tooltip>
+    );
+  }
 
   render() {
+    const language = this.props.language || "English"; // default to English if no language prop is passed
     return (
       <Form.Group as={Row} controlId="numChildrenForm" className="form-group-wrapper">
-        <Form.Label column sm={5} className="form-label-right">Number of Children</Form.Label>
+        <Form.Label column sm={5} className="form-label-right">{translations[language].label}</Form.Label>
         <Col sm={6} className={`form-control-with-arrow ${this.state.isOpen ? 'open' : ''}`}>
           <OverlayTrigger
             placement={window.innerWidth > 768 ? 'right' : 'top'}

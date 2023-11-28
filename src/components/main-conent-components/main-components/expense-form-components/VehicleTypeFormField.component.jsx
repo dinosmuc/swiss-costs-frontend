@@ -7,34 +7,34 @@ import { API_BASE_URL } from '../../../../config';
 
 // Utility Functions/Constants
 const electricityConsumptionOptions = {
-    'low': 'Low (10-15 kWh/100km)', 
-    'medium': 'Medium (16-20 kWh/100km)', 
-    'high': 'High (21-25 kWh/100km)', 
+    'low': 'Low (10-15 kWh/100km)',
+    'medium': 'Medium (16-20 kWh/100km)',
+    'high': 'High (21-25 kWh/100km)',
     'very_high': 'Very High (26+ kWh/100km)'
 };
 
 const distanceDrivenOptions = {
-    'low': 'Low (10-20 km)', 
-    'medium': 'Medium (21-50 km)', 
-    'high': 'High (51-100 km)', 
+    'low': 'Low (10-20 km)',
+    'medium': 'Medium (21-50 km)',
+    'high': 'High (51-100 km)',
     'very_high': 'Very High (100+ km)'
 };
 
 const fuelTypeOptions = {
-    'diesel': 'Diesel', 
+    'diesel': 'Diesel',
     'petrol': 'Petrol'
 };
 
 const fuelConsumptionOptions = {
-    'low': 'Low (3-6 L/100km)', 
-    'medium': 'Medium (7-11 L/100km)', 
-    'high': 'High (12-16 L/100km)', 
+    'low': 'Low (3-6 L/100km)',
+    'medium': 'Medium (7-11 L/100km)',
+    'high': 'High (12-16 L/100km)',
     'very_high': 'Very High (16+ L/100km)'
 };
 
 // DropdownField Component
-const DropdownField = ({ label, name, options, value, onChange, textBelow, vehicleData}) => {
-   
+const DropdownField = ({ label, name, options, value, onChange, textBelow, vehicleData }) => {
+
 
     const [isOpen, setIsOpen] = React.useState(false);
 
@@ -60,10 +60,10 @@ const DropdownField = ({ label, name, options, value, onChange, textBelow, vehic
             <Form.Label column sm={5} className="form-label-right">{label}:</Form.Label>
             <Col sm={6} className={`form-control-with-arrow ${isOpen ? 'open' : ''}`}>
                 <div onMouseDown={handleMouseDown}>
-                    <Form.Control 
-                        as="select" 
-                        name={name} 
-                        value={value} 
+                    <Form.Control
+                        as="select"
+                        name={name}
+                        value={value}
                         onChange={handleOptionChange} // Use handleOptionChange instead of onChange
                         onFocus={handleFocus}
                         onBlur={handleBlur}
@@ -75,9 +75,9 @@ const DropdownField = ({ label, name, options, value, onChange, textBelow, vehic
                     </Form.Control>
                     <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
                 </div>
-                <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute'}}> 
-  {textBelow}
-</Form.Text>
+                <Form.Text className="text-muted form-text-custom" style={{ position: 'absolute' }}>
+                    {textBelow}
+                </Form.Text>
 
 
 
@@ -98,12 +98,12 @@ const VehicleTypeSelector = ({ value, onChange }) => (
         }}
         value={value}
         onChange={onChange}
-        
+
     />
 );
 
 // ElectricVehicleFields Component
-const ElectricVehicleFields = ({ values, onChange,  vehicleData }) => (
+const ElectricVehicleFields = ({ values, onChange, vehicleData }) => (
     <div>
         <DropdownField
             label="Electricity Consumption (Electric Vehicle)"
@@ -118,14 +118,14 @@ const ElectricVehicleFields = ({ values, onChange,  vehicleData }) => (
             options={distanceDrivenOptions}
             value={values.distanceDriven}
             onChange={onChange}
-            textBelow={vehicleData && vehicleData.calculated_cost ? `- ${vehicleData.calculated_cost} CHF` : 'Calculating...'} 
-            
+            textBelow={vehicleData && vehicleData.calculated_cost ? `- ${vehicleData.calculated_cost} CHF` : 'Calculating...'}
+
         />
     </div>
 );
 
 // CombustionVehicleFields Component
-const CombustionVehicleFields = ({ values, onChange,  vehicleData }) => (
+const CombustionVehicleFields = ({ values, onChange, vehicleData }) => (
     <div>
         <DropdownField
             label="Fuel Type (Combustion Vehicle)"
@@ -147,9 +147,9 @@ const CombustionVehicleFields = ({ values, onChange,  vehicleData }) => (
             options={distanceDrivenOptions}
             value={values.distanceDriven}
             onChange={onChange}
-            textBelow={vehicleData && vehicleData.calculated_cost ? `- ${vehicleData.calculated_cost} CHF` : 'Calculating...'}  
+            textBelow={vehicleData && vehicleData.calculated_cost ? `- ${vehicleData.calculated_cost} CHF` : 'Calculating...'}
 
-            
+
         />
     </div>
 );
@@ -158,10 +158,10 @@ const CombustionVehicleFields = ({ values, onChange,  vehicleData }) => (
 class VehicleTypeFormField extends React.Component {
     constructor(props) {
         super(props);
-        const defaultCombustionVehicle = { 
-            fuelType: "petrol", 
-            fuelConsumption: "medium", 
-            distanceDriven: "medium" 
+        const defaultCombustionVehicle = {
+            fuelType: "petrol",
+            fuelConsumption: "medium",
+            distanceDriven: "medium"
         };
         const combustionVehicle = {
             ...defaultCombustionVehicle,
@@ -169,7 +169,7 @@ class VehicleTypeFormField extends React.Component {
         };
 
         this.state = {
-            vehicleData:[],
+            vehicleData: [],
             vehicleType: props.vehicleType || "combustion",
             electricVehicle: props.electricVehicle || {
                 electricityConsumption: "medium",
@@ -182,33 +182,33 @@ class VehicleTypeFormField extends React.Component {
 
     handleChange = (event) => {
         const newVehicleType = event.target.value;
-        this.setState({vehicleType: newVehicleType});
+        this.setState({ vehicleType: newVehicleType });
         this.props.onVehicleTypeChange(newVehicleType);
     }
-    
+
     handleChangeElectricVehicle = (event) => {
         const newState = {
             ...this.state.electricVehicle,
             [event.target.name]: event.target.value
         };
-    
+
         this.setState({
             electricVehicle: newState
         });
-    
+
         this.props.handleElectricVehicleChange(newState);
     }
-    
+
     handleChangeCombustionVehicle = (event) => {
         const newState = {
             ...this.state.combustionVehicle,
             [event.target.name]: event.target.value
         };
-    
+
         this.setState({
             combustionVehicle: newState
         });
-    
+
         this.props.handleCombustionVehicleChange(newState);
     }
 
@@ -222,72 +222,72 @@ class VehicleTypeFormField extends React.Component {
         }
 
         const stateAsJson = JSON.stringify(selectedState, null, 2); // Za formatiranje
-        
+
     }
-    
+
     sendDataToBackend = () => {
         let payload;
-      
+
         if (this.state.vehicleType === "combustion") {
-          payload = this.state.combustionVehicle;
+            payload = this.state.combustionVehicle;
         } else if (this.state.vehicleType === "electric") {
-          payload = this.state.electricVehicle;
+            payload = this.state.electricVehicle;
         }
-      
-        const endpoint = this.state.vehicleType === "combustion" 
-                         ? '/costs/api/calculate_combustion_vehicle_cost/' 
-                         : '/costs/api/calculate_electric_vehicle_cost/';
-      
+
+        const endpoint = this.state.vehicleType === "combustion"
+            ? '/costs/api/calculate_combustion_vehicle_cost/'
+            : '/costs/api/calculate_electric_vehicle_cost/';
+
         fetch(`${API_BASE_URL}${endpoint}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
         })
-        .then(response => response.json())
-        .then(data => {
-          this.setState({ vehicleData: data });
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      }
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ vehicleData: data });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
 
-      componentDidMount() {
+    componentDidMount() {
         this.sendDataToBackend();
-      }
+    }
 
-      componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         if (this.state.vehicleType !== prevState.vehicleType ||
             JSON.stringify(this.state.electricVehicle) !== JSON.stringify(prevState.electricVehicle) ||
             JSON.stringify(this.state.combustionVehicle) !== JSON.stringify(prevState.combustionVehicle)) {
             this.sendDataToBackend();
         }
-        
-    
-      }
+
+
+    }
 
     render() {
         this.printSelectedState();
         return (
             <Form.Group controlId="vehicleTypeForm">
-                <VehicleTypeSelector 
-                    value={this.state.vehicleType} 
-                    onChange={this.handleChange} 
+                <VehicleTypeSelector
+                    value={this.state.vehicleType}
+                    onChange={this.handleChange}
                 />
-    
+
                 {this.state.vehicleType === 'electric' && (
-                    <ElectricVehicleFields 
-                        values={this.state.electricVehicle} 
-                        onChange={this.handleChangeElectricVehicle} 
+                    <ElectricVehicleFields
+                        values={this.state.electricVehicle}
+                        onChange={this.handleChangeElectricVehicle}
                         vehicleData={this.state.vehicleData}
                     />
                 )}
-    
+
                 {this.state.vehicleType === 'combustion' && (
-                    <CombustionVehicleFields 
-                        values={this.state.combustionVehicle} 
+                    <CombustionVehicleFields
+                        values={this.state.combustionVehicle}
                         onChange={this.handleChangeCombustionVehicle}
                         vehicleData={this.state.vehicleData}
                     />

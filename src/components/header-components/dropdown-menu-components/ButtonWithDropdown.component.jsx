@@ -1,12 +1,12 @@
 import React from 'react';
 import '../button-components/button.styles.scss';
-import DropdownMenu from './DropdownMenu.component'; 
-import Button from '../button-components/Button.component';  
+import DropdownMenu from './DropdownMenu.component';
+import Button from '../button-components/Button.component';
 
 class ButtonWithDropdown extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             isHovered: false,
             displayedItem: props.defaultItem,
             selectedItem: props.defaultItem,
@@ -18,8 +18,8 @@ class ButtonWithDropdown extends React.Component {
     }
 
     handleMouseLeave = () => {
-        this.setState({ 
-            isHovered: false, 
+        this.setState({
+            isHovered: false,
             displayedItem: this.state.selectedItem
         });
     }
@@ -30,24 +30,30 @@ class ButtonWithDropdown extends React.Component {
 
     handleItemSelect = (item) => {
         this.setState({
-            displayedItem: item, 
+            displayedItem: item,
             selectedItem: item,
             isHovered: false,
         });
+
+        // Call the onItemSelect function passed as a prop to this component
+        if (this.props.onItemSelect) {
+            this.props.onItemSelect(item);
+        }
     }
+
 
     render() {
         return (
             <div className="myUniqueButton-container"
-                 onMouseEnter={this.handleMouseEnter}
-                 onMouseLeave={this.handleMouseLeave}>
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}>
                 <Button className={this.state.isHovered ? 'button-open' : ''}>{this.state.displayedItem}</Button>
-                {this.state.isHovered && 
-                 <DropdownMenu 
-                     items={this.props.items}
-                     onItemHover={this.handleItemHover} 
-                     onItemSelect={this.handleItemSelect} 
-                 />}
+                {this.state.isHovered &&
+                    <DropdownMenu
+                        items={this.props.items}
+                        onItemHover={this.handleItemHover}
+                        onItemSelect={this.handleItemSelect}
+                    />}
             </div>
         );
     }

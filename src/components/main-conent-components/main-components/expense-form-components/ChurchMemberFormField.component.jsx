@@ -2,6 +2,35 @@ import React from 'react';
 import { Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './formField.styles.scss';
 
+
+const translations = {
+  English: {
+    label: "Church Member",
+    options: {
+      church_member: "A church member",
+      not_church_member: "Not a church member"
+    },
+    tooltip: "In Switzerland, registered members of a church often pay a church tax, which is collected in addition to the regular cantonal tax. The tax rate varies by canton and your choice here may affect your estimated cost of living."
+  },
+  German: {
+    label: "Kirchenmitglied",
+    options: {
+      church_member: "Ein Kirchenmitglied",
+      not_church_member: "Kein Kirchenmitglied"
+    },
+    tooltip: "In der Schweiz zahlen registrierte Kirchenmitglieder oft eine Kirchensteuer, die zusätzlich zur regulären kantonalen Steuer erhoben wird. Der Steuersatz variiert je nach Kanton und Ihre Wahl hier kann Ihre geschätzten Lebenshaltungskosten beeinflussen."
+  },
+  Croatian: {
+    label: "Član crkve",
+    options: {
+      church_member: "Član crkve",
+      not_church_member: "Nisam član crkve"
+    },
+    tooltip: "U Švicarskoj, registrirani članovi crkve često plaćaju crkveni porez koji se naplaćuje uz redoviti kantonalni porez. Stopa poreza varira po kantonu i vaš izbor ovdje može utjecati na procijenjene troškove života."
+  }
+};
+
+
 class ChurchMemberFormField extends React.Component {
   constructor(props) {
     super(props);
@@ -27,16 +56,20 @@ class ChurchMemberFormField extends React.Component {
     this.setState({ isOpen: false });
   }
 
-  renderTooltip = (props) => (
-    <Tooltip id="church-tooltip" className="custom-tooltip" {...props}>
-      In Switzerland, registered members of a church often pay a church tax, which is collected in addition to the regular cantonal tax. The tax rate varies by canton and your choice here may affect your estimated cost of living.
-    </Tooltip>
-  )
+  renderTooltip = (props) => {
+    const language = this.props.language || "English"; // default to English if no language prop is passed
+    return (
+      <Tooltip id="church-tooltip" className="custom-tooltip" {...props}>
+        {translations[language].tooltip}
+      </Tooltip>
+    );
+  }
 
   render() {
+    const language = this.props.language || "English"; // default to English if no language prop is passed
     return (
       <Form.Group as={Row} controlId="churchMemberForm" className="form-group-wrapper">
-        <Form.Label column sm={5} className="form-label-right">Church Member</Form.Label>
+        <Form.Label column sm={5} className="form-label-right">{translations[language].label}</Form.Label>
         <Col sm={6} className={`form-control-with-arrow ${this.state.isOpen ? 'open' : ''}`}>
           <OverlayTrigger
             placement={window.innerWidth > 768 ? 'right' : 'top'}
@@ -53,8 +86,8 @@ class ChurchMemberFormField extends React.Component {
                 onBlur={this.handleBlur}
                 className="red-text"
               >
-                <option value="church_member">A church member</option>
-                <option value="not_church_member">Not a church member</option>
+                <option value="church_member">{translations[language].options.church_member}</option>
+                <option value="not_church_member">{translations[language].options.not_church_member}</option>
               </Form.Control>
               <span className="form-control-dropdown-arrow"></span> {/* Arrow element */}
             </div>
@@ -66,3 +99,5 @@ class ChurchMemberFormField extends React.Component {
 }
 
 export default ChurchMemberFormField;
+
+
